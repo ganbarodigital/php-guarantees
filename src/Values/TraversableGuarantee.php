@@ -134,7 +134,7 @@ class TraversableGuarantee implements Guarantee
     /**
      * convert our wrapped data into a JSON string
      *
-     * @return array|JsonSerializable|stdClass
+     * @return array|Traversable|stdClass
      */
     public function jsonSerialize()
     {
