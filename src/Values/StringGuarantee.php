@@ -45,27 +45,25 @@ namespace GanbaroDigital\Guarantees\Values;
 
 use ArrayIterator;
 use Iterator;
-use GanbaroDigital\Reflection\Checks\IsTraversable;
-use JsonSerializable;
-use stdClass;
+use GanbaroDigital\Reflection\Checks\IsStringy;
 use Traversable;
 
-class TraversableGuarantee implements Guarantee
+class StringGuarantee implements Guarantee
 {
     /**
-     * the traversable data that we represent
-     * @var array|Traversable|stdClass
+     * the string data that we represent
+     * @var string
      */
-    private $data = [];
+    private $data = '';
 
     /**
-     * does $data hold real date?
+     * does $data hold a real value?
      * @var boolean
      */
     private $isEmpty = true;
 
     /**
-     * create a read-only, traversable guarantee from another piece of data
+     * create a read-only, string guarantee from another piece of data
      *
      * @param mixed $data
      *        the data to wrap
@@ -73,9 +71,9 @@ class TraversableGuarantee implements Guarantee
     public function __construct($data)
     {
         // we only assign our data if we have been given something
-        // that is Traversable
-        if (IsTraversable::check($data)) {
-            $this->data = $data;
+        // that is string-like
+        if (IsStringy::check($data)) {
+            $this->data = (string)$data;
             $this->isEmpty = false;
         }
     }
@@ -84,9 +82,9 @@ class TraversableGuarantee implements Guarantee
      * return the value of this guarantee (if it has one), or $default if
      * this guarantee is empty
      *
-     * @param  array|Traversable|stdClass $default
+     * @param  string $default
      *         the value to return if this guarantee is empty
-     * @return array|Traversable|stdClass
+     * @return string
      */
     public function getOrElse($default)
     {
@@ -117,26 +115,27 @@ class TraversableGuarantee implements Guarantee
      */
     public function getIterator()
     {
-        // general case - we've wrapped a real array
-        if (is_array($this->data)) {
-            return new ArrayIterator($this->data);
-        }
-
-        // special case - we've wrapped a Traversable object
-        if (method_exists($this->data, 'getIterator')) {
-            return $this->data->getIterator();
-        }
-
-        // special case - we're wrapped a stdClass
-        return new ArrayIterator($this->data);
+        // return an array with just one element
+        return new ArrayIterator([(string)$this]);
     }
 
     /**
      * convert our wrapped data into a JSON string
      *
-     * @return array|Traversable|stdClass
+     * @return string
      */
     public function jsonSerialize()
+    {
+        // general case
+        return (string)$this;
+    }
+
+    /**
+     * convert our data into a string
+     *
+     * @return string
+     */
+    public function __toString()
     {
         return $this->data;
     }
