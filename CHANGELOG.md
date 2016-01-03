@@ -4,6 +4,11 @@
 
 Nothing yet.
 
+### New
+
+* Added support for wrapping Stringy data.
+  * Added `GanbaroDigital\Guarantees\Values\StringGuarantee`
+
 ## 1.0.0
 
 Released Sat 2nd Jan 2016.
