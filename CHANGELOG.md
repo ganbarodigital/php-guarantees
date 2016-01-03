@@ -4,6 +4,10 @@
 
 Nothing yet.
 
+## 1.1.0
+
+Released Sun 3rd Jan 2016.
+
 ### New
 
 * Added support for wrapping Stringy data.
